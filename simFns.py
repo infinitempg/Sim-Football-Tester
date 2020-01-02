@@ -1,13 +1,13 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib as mpl
+# import matplotlib as mpl
 from astropy.table import Table
 from astropy.io import ascii
 from scipy import stats
 from tqdm import tqdm_notebook as tqdm
 import os
 
-mpl.rcParams['figure.facecolor'] = 'w'
+# mpl.rcParams['figure.facecolor'] = 'w'
 
 def readCSV(path,saveFile,outFile):
     return Table.read(path + saveFile+'/Output/'+saveFile+'_'+outFile+'.csv',format='csv',encoding='latin-1')
@@ -107,22 +107,22 @@ def statsGraph(gameCSV,moments,stat,path,saveFile,ls='-',winMom=None):
             if winMom == None:
                 pltLabel = path+saveFile+'\n'+r' $(\mu = %.2f$'%moments['mean'] + r', $\sigma = %.3f)$'%moments['std']
             else:
-                pltLabel = path+saveFile+'\n'+r' $(HPct = %.2f'%winMom['HPct'] + r', \mu = %.2f$'%moments['mean'] + r', $\sigma = %.3f)$'%moments['std']
+                pltLabel = path+saveFile+'\n'+r' $(HPct = %.4f'%winMom['HPct'] + r', \mu = %.2f$'%moments['mean'] + r', $\sigma = %.3f)$'%moments['std']
                 # plt.axvline(0,c='gray',ls='..')
             plt.hist(statTable,bins=binsFD,histtype='step',label=pltLabel,
                      ls=ls,lw=5,weights=[1/len(statTable)]*len(statTable))
         elif max(statTable) == 1:
             plt.hist(statTable,
                      bins=np.arange(min(statTable),max(statTable)+2,1),histtype='step',
-                     label=path+saveFile+'\n'+r' $(\mu = %.2f$'%moments['mean'] + r', $\sigma = %.3f)$'%moments['std'],ls=ls,lw=5,weights=[1/len(statTable)]*len(statTable))
+                     label=path+saveFile+'\n'+r' $(\mu = %.2f$'%moments['mean'] + r', $\sigma = %.2f)$'%moments['std'],ls=ls,lw=5,weights=[1/len(statTable)]*len(statTable))
         else:
             plt.hist(statTable,
                      bins=np.arange(min(statTable),max(statTable)+1,1),histtype='step',
-                     label=path+saveFile+'\n'+r' $(\mu = %.2f$'%moments['mean'] + r', $\sigma = %.3f)$'%moments['std'],ls=ls,lw=5,weights=[1/len(statTable)]*len(statTable))
+                     label=path+saveFile+'\n'+r' $(\mu = %.2f$'%moments['mean'] + r', $\sigma = %.2f)$'%moments['std'],ls=ls,lw=5,weights=[1/len(statTable)]*len(statTable))
     except ValueError:
          plt.hist(statTable,
                  bins=np.arange(min(statTable),max(statTable)+5,5),histtype='step',
-                 label=path+saveFile+'\n'+r' $(\mu = %.2f$'%moments['mean'] + r', $\sigma = %.3f)$'%moments['std'],ls=ls,lw=5,weights=[1/len(statTable)]*len(statTable))
+                 label=path+saveFile+'\n'+r' $(\mu = %.3f$'%moments['mean'] + r', $\sigma = %.2f)$'%moments['std'],ls=ls,lw=5,weights=[1/len(statTable)]*len(statTable))
     plt.tight_layout()
     plt.legend()
 #     plt.savefig(path + saveFile + '/results/playerStats/' + Name + '.png')
@@ -157,7 +157,7 @@ def getGameStats(path,saveFile,stat,plot=False,second=False,path2=None,saveFile2
 
     if plot == True:
         try:
-            dataPlt = plt.figure(figsize=(12,6))
+            dataPlt = plt.figure(figsize=(12,6),facecolor='w')
             plt.title(stat)
             statsGraph(gameCSV,moments,stat,path,saveFile,winMom=winMoments)
             if second == True:
@@ -213,7 +213,7 @@ def getPlayerStats(path,saveFile,Name,stat,Team,plot=True,second=False,path2=Non
 
     if plot == True:
         try:
-            dataPlt = plt.figure(figsize=(12,6))
+            dataPlt = plt.figure(figsize=(12,6),facecolor='w')
             plt.title(Name + ' - ' + stat)
             statsGraph(PlayerStats,moments,stat,path,saveFile)
             if second == True:
@@ -221,6 +221,6 @@ def getPlayerStats(path,saveFile,Name,stat,Team,plot=True,second=False,path2=Non
         except TypeError:
             print('Cannot plot %s'%stat)
 
-#     return PlayerStats[statList]
     if plot == False:
-        return moments
+#         return moments
+        return PlayerStats[statList]
